@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reformas Control Center 2.1</title>
+<style>
+:root{--bg:#050914;--panel:#0c1423;--panel2:#101b2d;--line:#263957;--txt:#edf4ff;--muted:#8297b8;--cyan:#35c7ff;--green:#39dfa0;--red:#ff5b7d;--yellow:#ffc857}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,sans-serif}
+body{background-image:radial-gradient(circle at 10% 0,#12305b55,transparent 30%),radial-gradient(circle at 90% 10%,#241c5944,transparent 30%)}
+header{height:68px;background:#080e19f5;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:20;box-shadow:0 0 30px #000}
+.logo{font-weight:800;font-size:20px}.logo span{color:var(--cyan);text-shadow:0 0 12px #35c7ff88}.save{font-size:11px;color:var(--muted)}
+.layout{display:flex;min-height:calc(100vh - 68px)}aside{width:220px;flex:none;background:#070d17dd;border-right:1px solid var(--line);padding:16px 10px}
+nav button{width:100%;background:transparent;border:1px solid transparent;color:#91a5c5;padding:12px 13px;margin:3px 0;border-radius:8px;text-align:left;font-weight:700;cursor:pointer}nav button:hover,nav button.active{background:#10213a;border-color:#294c70;color:#fff;box-shadow:inset 3px 0 var(--cyan)}
+main{width:100%;max-width:1550px;margin:auto;padding:22px}.view{display:none}.view.active{display:block}
+h1{font-size:25px;margin:0 0 5px}h2{font-size:18px;margin:0 0 14px}.sub{color:var(--muted);margin-bottom:18px;font-size:13px}
+.grid{display:grid;gap:14px}.kpis{grid-template-columns:repeat(5,1fr)}.houses{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1fr}.photos{grid-template-columns:repeat(4,1fr)}
+.card,.panel{background:linear-gradient(145deg,#0d1728,#09111e);border:1px solid var(--line);border-radius:12px;padding:17px;box-shadow:0 0 22px #0009}.label{color:var(--muted);font-size:11px;text-transform:uppercase}.kpi{font-size:25px;font-weight:800;margin-top:7px}
+.househead{display:flex;justify-content:space-between;font-weight:800}.ring{width:118px;height:118px;border-radius:50%;background:conic-gradient(var(--cyan) var(--p),#17253c 0);display:grid;place-items:center;margin:15px auto;box-shadow:0 0 24px #35c7ff33}.ring div{width:86px;height:86px;border-radius:50%;background:#0a1220;display:grid;place-items:center;font-size:21px}
+.progress{height:8px;background:#17243a;border-radius:9px;overflow:hidden}.progress i{display:block;height:100%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.btn{border:1px solid #304966;background:#132137;color:#e5efff;border-radius:7px;padding:9px 12px;font-weight:700;cursor:pointer}.primary{background:#087ebd;border-color:var(--cyan);box-shadow:0 0 13px #35c7ff33}.danger{background:#381522;border-color:#743047;color:#ff9caf}.green{background:#10362d;border-color:#287b64;color:#8ff1d0}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}input,select,textarea{background:#081321;color:#edf4ff;border:1px solid #304663;border-radius:7px;padding:9px;font:inherit;width:100%}.toolbar>*{max-width:240px}textarea{min-height:75px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:900px}th,td{padding:10px 8px;border-bottom:1px solid #20304a;text-align:left}th{background:#0e192a;color:#91a6c8;font-size:12px}
+.tag{display:inline-block;border-radius:20px;padding:4px 7px;font-size:10px;font-weight:800}.pending{background:#3b2d0b;color:#ffd873}.doing{background:#102e47;color:#7dd8ff}.done{background:#10372d;color:#7be8c2}.late{background:#3d1523;color:#ff92aa}.muted{color:var(--muted)}.empty{text-align:center;padding:30px;color:var(--muted)}
+.modal{display:none;position:fixed;inset:0;background:#02050ddf;z-index:50;align-items:center;justify-content:center;padding:10px}.modal.open{display:flex}.modalbox{width:min(760px,100%);max-height:94vh;overflow:auto;background:#0b1422;border:1px solid #365174;border-radius:13px;padding:20px;box-shadow:0 0 50px #000}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.full{grid-column:1/-1}label{display:block;color:#8fa5c6;font-size:11px;margin-bottom:5px}
+.gantt{overflow:auto}.grow{display:grid;grid-template-columns:230px 900px;min-width:1130px;border-bottom:1px solid #20304a}.gname{padding:10px;border-right:1px solid #20304a}.timeline{position:relative;height:42px;background:repeating-linear-gradient(90deg,transparent 0,transparent 99px,#1b2a40 100px)}.gbar{position:absolute;top:9px;height:24px;border-radius:6px;background:linear-gradient(90deg,#087ebd,#35c7ff);box-shadow:0 0 12px #35c7ff55}
+.photo{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#09111f}.photo img{display:block;width:100%;height:155px;object-fit:cover}.photo div{padding:9px}
+.mobilebar{display:none}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}.houses,.two,.photos{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){
+ header{height:60px;padding:0 12px}.logo{font-size:15px}.logo span{display:none}.layout{display:block;padding-bottom:70px}aside{display:none}main{padding:12px}
+ .mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;height:68px;background:#080e19f7;border-top:1px solid var(--line);z-index:40;justify-content:space-around;padding:5px 2px;box-shadow:0 -12px 30px #000}
+ .mobilebar button{border:0;background:none;color:#7f95b7;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:3px}.mobilebar button span{font-size:20px}.mobilebar button.active{color:var(--cyan)}
+ .kpis{grid-template-columns:1fr 1fr;gap:8px}.houses,.two,.photos{grid-template-columns:1fr}.card,.panel{padding:13px}h1{font-size:21px}.sub{font-size:12px}
+ .toolbar{display:grid;grid-template-columns:1fr 1fr}.toolbar>*{max-width:none}.toolbar .primary{grid-column:1/-1}
+ .form{grid-template-columns:1fr}.full{grid-column:auto}.modalbox{padding:15px}
+}
+</style>
+</head>
+<body>
+<header><div class="logo">REFORMAS <span>CONTROL CENTER</span></div><div class="save" id="saveInfo">Dados locais</div></header>
+<div class="layout">
+<aside><nav id="sideNav">
+<button class="active" data-view="dashboard">◈ Dashboard</button>
+<button data-view="atividades">▦ Atividades</button><button data-view="gantt">▥ Cronograma</button>
+<button data-view="financeiro">◫ Financeiro</button><button data-view="materiais">◇ Materiais</button>
+<button data-view="fotos">▧ Fotos</button><button data-view="historico">◷ Histórico</button><button data-view="backup">⇩ Backup / Dados</button>
+</nav></aside>
+<main>
+<section id="dashboard" class="view active"><h1>Central de controle</h1><div class="sub">Visão consolidada das três reformas.</div><div class="grid kpis" id="kpis"></div><br><div class="grid houses" id="houseCards"></div><br><div class="grid two"><div class="panel"><h2>Próximas atividades</h2><div id="next"></div></div><div class="panel"><h2>Orçamento consolidado</h2><div id="budget"></div></div></div></section>
+
+<section id="atividades" class="view"><h1>Atividades</h1><div class="sub">Cadastre e acompanhe tudo que precisa ser executado.</div><div class="toolbar"><button class="btn primary" id="newActivity">+ Nova atividade</button><select id="afHouse"><option value="">Todas as casas</option><option>Vila Clementino</option><option>Casa da Vila</option><option>Vila Alpiste</option></select><select id="afStatus"><option value="">Todos os status</option><option>Pendente</option><option>Em andamento</option><option>Concluído</option></select><select id="afCat"><option value="">Todas as categorias</option><option>Pintura</option><option>Drywall</option><option>Elétrica</option><option>Hidráulica</option><option>Alvenaria</option><option>Piso/Revestimento</option><option>Marcenaria</option><option>Telhado</option><option>Esquadrias</option><option>Limpeza</option><option>Outros</option></select><input id="afSearch" placeholder="Pesquisar..."></div><div class="panel tablewrap"><table><thead><tr><th>Casa</th><th>Atividade</th><th>Ambiente</th><th>Categoria</th><th>Prazo</th><th>Status</th><th>Prioridade</th><th>Realizado</th><th></th></tr></thead><tbody id="activityTable"></tbody></table></div></section>
+
+<section id="gantt" class="view"><h1>Cronograma</h1><div class="sub">Linha do tempo das atividades com datas definidas.</div><div class="panel gantt" id="ganttBox"></div></section>
+
+<section id="financeiro" class="view"><h1>Financeiro</h1><div class="sub">Previsto × realizado por casa.</div><div class="grid houses" id="financeCards"></div><br><div class="panel tablewrap"><table><thead><tr><th>Casa</th><th>Atividades</th><th>Previsto</th><th>Realizado</th><th>Saldo</th><th>% consumido</th></tr></thead><tbody id="financeTable"></tbody></table></div></section>
+
+<section id="materiais" class="view"><h1>Materiais</h1><div class="sub">Controle de compras e materiais utilizados.</div><div class="toolbar"><button class="btn primary" id="newMaterial">+ Novo material</button></div><div class="panel tablewrap"><table><thead><tr><th>Casa</th><th>Material</th><th>Qtd.</th><th>Unidade</th><th>Fornecedor</th><th>Valor</th><th>Status</th><th></th></tr></thead><tbody id="materialTable"></tbody></table></div></section>
+
+<section id="fotos" class="view"><h1>Fotos da reforma</h1><div class="sub">Registre antes, durante e depois. As fotos ficam no armazenamento local.</div><div class="toolbar"><select id="photoHouse"><option>Vila Clementino</option><option>Casa da Vila</option><option>Vila Alpiste</option></select><button class="btn primary" id="photoButton">+ Adicionar fotos</button><input id="photoFile" type="file" accept="image/*" multiple hidden></div><div class="grid photos" id="photoGrid"></div></section>
+
+<section id="historico" class="view"><h1>Histórico</h1><div class="sub">Registro das alterações.</div><div class="panel tablewrap"><table><thead><tr><th>Data/hora</th><th>Ação</th><th>Detalhe</th></tr></thead><tbody id="historyTable"></tbody></table></div></section>
+
+<section id="backup" class="view"><h1>Backup e dados</h1><div class="sub">Transfira os dados entre celular e computador durante os testes.</div><div class="panel"><h2>Backup completo</h2><div class="grid two"><div class="card"><span class="label">Último backup</span><b id="lastBackup">Nenhum</b></div><div class="card"><span class="label">Registros locais</span><b id="localCount">0</b></div></div><br><p class="muted">O backup inclui atividades, materiais, fotos e histórico.</p><div class="toolbar"><button class="btn primary" id="exportBtn">Exportar backup</button><button class="btn" id="importBtn">Importar backup</button><input id="backupFile" type="file" accept=".json" hidden></div><hr style="border-color:#20304a"><p class="muted">A sincronização automática na nuvem será adicionada futuramente. Por enquanto, exporte no celular e importe no desktop (e vice-versa).</p><button class="btn danger" id="clearBtn">Apagar todos os dados</button></div></section>
+</main></div>
+
+<div class="mobilebar" id="mobileNav"><button class="active" data-view="dashboard"><span>◈</span>Início</button><button data-view="atividades"><span>▦</span>Atividades</button><button data-view="gantt"><span>▥</span>Cronograma</button><button data-view="financeiro"><span>◫</span>Financeiro</button><button data-view="fotos"><span>▧</span>Fotos</button></div>
+
+<div class="modal" id="activityModal"><div class="modalbox"><h2 id="activityTitle">Nova atividade</h2><form id="activityForm"><input type="hidden" id="editId"><div class="form">
+<div><label>Casa</label><select id="house"><option>Vila Clementino</option><option>Casa da Vila</option><option>Vila Alpiste</option></select></div>
+<div><label>Ambiente</label><input id="room"></div><div class="full"><label>Atividade</label><input id="activity" required></div>
+<div><label>Categoria</label><select id="category"><option>Pintura</option><option>Drywall</option><option>Elétrica</option><option>Hidráulica</option><option>Alvenaria</option><option>Piso/Revestimento</option><option>Marcenaria</option><option>Telhado</option><option>Esquadrias</option><option>Limpeza</option><option>Outros</option></select></div>
+<div><label>Responsável</label><input id="responsible"></div><div><label>Início</label><input id="start" type="date"></div><div><label>Prazo</label><input id="deadline" type="date"></div>
+<div><label>Status</label><select id="status"><option>Pendente</option><option>Em andamento</option><option>Concluído</option></select></div><div><label>Prioridade</label><select id="priority"><option>Alta</option><option>Média</option><option>Baixa</option></select></div>
+<div><label>Custo previsto</label><input id="planned" type="number" step=".01" value="0"></div><div><label>Custo realizado</label><input id="actual" type="number" step=".01" value="0"></div>
+<div class="full"><label>Observações</label><textarea id="notes"></textarea></div></div><br><button class="btn primary">Salvar atividade</button> <button type="button" class="btn" id="cancelActivity">Cancelar</button></form></div></div>
+
+<div class="modal" id="materialModal"><div class="modalbox"><h2>Novo material</h2><form id="materialForm"><div class="form">
+<div><label>Casa</label><select id="mh"><option>Vila Clementino</option><option>Casa da Vila</option><option>Vila Alpiste</option></select></div><div><label>Material</label><input id="mn" required></div><div><label>Quantidade</label><input id="mq" type="number" step=".01"></div><div><label>Unidade</label><input id="mu" placeholder="un, m², saco..."></div><div><label>Fornecedor</label><input id="mf"></div><div><label>Valor total</label><input id="mv" type="number" step=".01"></div><div><label>Status</label><select id="ms"><option>Orçado</option><option>Comprado</option><option>Recebido</option><option>Utilizado</option></select></div></div><br><button class="btn primary">Salvar</button> <button type="button" class="btn" id="cancelMaterial">Cancelar</button></form></div></div>
+
+<script>
+(function(){
+'use strict';
+const KEY='reformas_cc_21_data';
+const META='reformas_cc_21_meta';
+const H=['Vila Clementino','Casa da Vila','Vila Alpiste'];
+let data={activities:[],materials:[],photos:[],history:[]};
+
+function $(id){return document.getElementById(id)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function money(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));$('saveInfo').textContent='Salvo localmente • '+new Date().toLocaleTimeString('pt-BR')}catch(e){alert('Não foi possível salvar. O armazenamento do navegador pode estar cheio.')}}
+function load(){try{let x=localStorage.getItem(KEY);if(x)data=JSON.parse(x);data.activities=data.activities||[];data.materials=data.materials||[];data.photos=data.photos||[];data.history=data.history||[]}catch(e){data={activities:[],materials:[],photos:[],history:[]}}}
+function log(a,d){data.history.unshift({id:uid(),at:new Date().toISOString(),action:a,detail:d})}
+function late(a){return a.status!=='Concluído'&&a.deadline&&new Date(a.deadline+'T23:59')<new Date()}
+function tag(a){if(late(a))return '<span class="tag late">ATRASADO</span>';if(a.status==='Concluído')return '<span class="tag done">CONCLUÍDO</span>';if(a.status==='Em andamento')return '<span class="tag doing">EM ANDAMENTO</span>';return '<span class="tag pending">PENDENTE</span>'}
+function pct(a){return a.length?Math.round(a.filter(x=>x.status==='Concluído').length/a.length*100):0}
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button,#mobileNav button').forEach(b=>b.classList.toggle('active',b.getAttribute('data-view')===id));renderAll();window.scrollTo(0,0)}
+document.querySelectorAll('nav button,#mobileNav button').forEach(b=>b.addEventListener('click',function(){show(this.getAttribute('data-view'))}));
+
+function renderAll(){renderDash();renderActivities();renderGantt();renderFinance();renderMaterials();renderPhotos();renderHistory();renderBackup()}
+function renderDash(){
+ let A=data.activities,done=A.filter(a=>a.status==='Concluído').length,doing=A.filter(a=>a.status==='Em andamento').length,l=A.filter(late).length,ac=A.reduce((s,a)=>s+Number(a.actual||0),0),pl=A.reduce((s,a)=>s+Number(a.planned||0),0);
+ $('kpis').innerHTML=[['Atividades',A.length],['Concluídas',done],['Em andamento',doing],['Atrasadas',l],['Realizado',money(ac)]].map(x=>'<div class="card"><div class="label">'+x[0]+'</div><div class="kpi">'+x[1]+'</div></div>').join('');
+ $('houseCards').innerHTML=H.map(h=>{let a=A.filter(x=>x.house===h),p=pct(a);return '<div class="card"><div class="househead"><span>🏠 '+h+'</span><span class="muted">'+a.length+' previstas</span></div><div class="ring" style="--p:'+p*3.6+'deg"><div>'+p+'%</div></div><div class="muted">'+a.filter(x=>x.status==='Concluído').length+' concluídas • '+a.filter(late).length+' atrasadas</div><div class="progress" style="margin-top:10px"><i style="width:'+p+'%"></i></div></div>'}).join('');
+ let up=A.filter(a=>a.status!=='Concluído').sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999')).slice(0,6);
+ $('next').innerHTML=up.length?up.map(a=>'<div style="padding:9px 0;border-bottom:1px solid #20304a"><b>'+a.activity+'</b><br><span class="muted">'+a.house+' • '+(a.deadline?new Date(a.deadline+'T12:00').toLocaleDateString('pt-BR'):'sem prazo')+' • </span>'+tag(a)+'</div>').join(''):'<div class="empty">Nenhuma atividade pendente.</div>';
+ $('budget').innerHTML='<div style="font-size:28px;font-weight:800">'+money(ac)+'</div><div class="muted">de '+money(pl)+' previstos</div><div class="progress" style="margin:12px 0"><i style="width:'+Math.min(100,pl?ac/pl*100:0)+'%"></i></div><span class="muted">'+(pl?Math.round(ac/pl*100):0)+'% do orçamento consumido</span>';
+}
+function renderActivities(){
+ let h=$('afHouse').value,s=$('afStatus').value,c=$('afCat').value,q=$('afSearch').value.toLowerCase();
+ let A=data.activities.filter(a=>(!h||a.house===h)&&(!s||a.status===s)&&(!c||a.category===c)&&(!q||((a.activity||'')+' '+(a.room||'')+' '+(a.notes||'')).toLowerCase().includes(q))).sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999'));
+ $('activityTable').innerHTML=A.length?A.map(a=>'<tr><td>'+a.house+'</td><td><b>'+a.activity+'</b></td><td>'+(a.room||'-')+'</td><td>'+a.category+'</td><td>'+(a.deadline?new Date(a.deadline+'T12:00').toLocaleDateString('pt-BR'):'-')+'</td><td>'+tag(a)+'</td><td>'+a.priority+'</td><td>'+money(a.actual)+'</td><td><button class="btn edit" data-id="'+a.id+'">Editar</button> <button class="btn danger del" data-id="'+a.id+'">Excluir</button></td></tr>').join(''):'<tr><td colspan="9" class="empty">Nenhuma atividade encontrada.</td></tr>';
+ document.querySelectorAll('.edit').forEach(b=>b.onclick=()=>openActivity(b.dataset.id));document.querySelectorAll('.del').forEach(b=>b.onclick=()=>deleteActivity(b.dataset.id));
+}
+['afHouse','afStatus','afCat','afSearch'].forEach(id=>$(id).addEventListener('input',renderActivities));
+function openActivity(id){
+ $('activityForm').reset();$('editId').value=id||'';$('activityTitle').textContent=id?'Editar atividade':'Nova atividade';
+ if(id){let a=data.activities.find(x=>x.id===id);if(!a)return;['house','room','activity','category','responsible','start','deadline','status','priority','planned','actual','notes'].forEach(k=>$(k).value=a[k]??'')}
+ else{$('house').value=H[0];$('status').value='Pendente';$('priority').value='Média';$('planned').value=0;$('actual').value=0}
+ $('activityModal').classList.add('open')
+}
+$('newActivity').onclick=()=>openActivity();$('cancelActivity').onclick=()=>$('activityModal').classList.remove('open');
+$('activityForm').onsubmit=function(e){e.preventDefault();let id=$('editId').value||uid(),a={id};['house','room','activity','category','responsible','start','deadline','status','priority','planned','actual','notes'].forEach(k=>a[k]=$(k).value);let old=data.activities.find(x=>x.id===id);if(old){data.activities=data.activities.map(x=>x.id===id?a:x);log('Atividade alterada',a.activity)}else{data.activities.push(a);log('Atividade criada',a.activity)}save();$('activityModal').classList.remove('open');renderAll()};
+
+function deleteActivity(id){let a=data.activities.find(x=>x.id===id);if(a&&confirm('Excluir esta atividade?')){data.activities=data.activities.filter(x=>x.id!==id);log('Atividade excluída',a.activity);save();renderAll()}}
+function renderGantt(){
+ let A=data.activities.filter(a=>a.start&&a.deadline).sort((a,b)=>a.start.localeCompare(b.start));if(!A.length){$('ganttBox').innerHTML='<div class="empty">Cadastre início e prazo para visualizar o cronograma.</div>';return}
+ let min=Math.min.apply(null,A.map(a=>new Date(a.start).getTime())),max=Math.max.apply(null,A.map(a=>new Date(a.deadline).getTime())),span=Math.max(1,(max-min)/86400000);
+ $('ganttBox').innerHTML='<div class="grow"><div class="gname"><b>Atividade</b></div><div class="timeline"></div></div>'+A.map(a=>{let left=(new Date(a.start).getTime()-min)/86400000/span*100,w=Math.max(.8,(new Date(a.deadline).getTime()-new Date(a.start).getTime())/86400000/span*100);return '<div class="grow"><div class="gname"><b>'+a.activity+'</b><br><span class="muted">'+a.house+'</span></div><div class="timeline"><div class="gbar" style="left:'+left+'%;width:'+w+'%"></div></div></div>'}).join('')
+}
+function renderFinance(){
+ $('financeCards').innerHTML=H.map(h=>{let a=data.activities.filter(x=>x.house===h),p=a.reduce((s,x)=>s+Number(x.planned||0),0),r=a.reduce((s,x)=>s+Number(x.actual||0),0);return '<div class="card"><b>'+h+'</b><p class="muted">Previsto</p><strong>'+money(p)+'</strong><p class="muted">Realizado</p><strong>'+money(r)+'</strong><div class="progress" style="margin-top:10px"><i style="width:'+Math.min(100,p?r/p*100:0)+'%"></i></div></div>'}).join('');
+ $('financeTable').innerHTML=H.map(h=>{let a=data.activities.filter(x=>x.house===h),p=a.reduce((s,x)=>s+Number(x.planned||0),0),r=a.reduce((s,x)=>s+Number(x.actual||0),0);return '<tr><td>'+h+'</td><td>'+a.length+'</td><td>'+money(p)+'</td><td>'+money(r)+'</td><td>'+money(p-r)+'</td><td>'+(p?Math.round(r/p*100):0)+'%</td></tr>'}).join('')
+}
+function renderMaterials(){$('materialTable').innerHTML=data.materials.length?data.materials.map(m=>'<tr><td>'+m.house+'</td><td>'+m.name+'</td><td>'+m.qty+'</td><td>'+m.unit+'</td><td>'+(m.supplier||'-')+'</td><td>'+money(m.value)+'</td><td>'+m.status+'</td><td><button class="btn danger mdel" data-id="'+m.id+'">Excluir</button></td></tr>').join(''):'<tr><td colspan="8" class="empty">Nenhum material cadastrado.</td></tr>';document.querySelectorAll('.mdel').forEach(b=>b.onclick=()=>{if(confirm('Excluir material?')){data.materials=data.materials.filter(x=>x.id!==b.dataset.id);save();renderAll()}})}
+$('newMaterial').onclick=()=>$('materialModal').classList.add('open');$('cancelMaterial').onclick=()=>$('materialModal').classList.remove('open');
+$('materialForm').onsubmit=function(e){e.preventDefault();data.materials.push({id:uid(),house:$('mh').value,name:$('mn').value,qty:$('mq').value,unit:$('mu').value,supplier:$('mf').value,value:$('mv').value,status:$('ms').value});log('Material criado',$('mn').value);save();$('materialModal').classList.remove('open');e.target.reset();renderAll()};
+function renderPhotos(){$('photoGrid').innerHTML=data.photos.length?data.photos.map(p=>'<div class="photo"><img src="'+p.data+'"><div><b>'+p.house+'</b><br><span class="muted">'+new Date(p.at).toLocaleDateString('pt-BR')+'</span><br><button class="btn danger pdel" data-id="'+p.id+'">Excluir</button></div></div>').join(''):'<div class="empty">Nenhuma foto adicionada.</div>';document.querySelectorAll('.pdel').forEach(b=>b.onclick=()=>{if(confirm('Excluir foto?')){data.photos=data.photos.filter(x=>x.id!==b.dataset.id);save();renderPhotos()}})}
+$('photoButton').onclick=()=>$('photoFile').click();
+$('photoFile').onchange=function(){Array.from(this.files).forEach(f=>{let r=new FileReader();r.onload=function(){data.photos.push({id:uid(),house:$('photoHouse').value,data:r.result,at:new Date().toISOString(),name:f.name});log('Foto adicionada',f.name+' • '+$('photoHouse').value);save();renderPhotos()};r.readAsDataURL(f)});this.value=''};
+function renderHistory(){$('historyTable').innerHTML=data.history.length?data.history.map(x=>'<tr><td>'+new Date(x.at).toLocaleString('pt-BR')+'</td><td>'+x.action+'</td><td>'+x.detail+'</td></tr>').join(''):'<tr><td colspan="3" class="empty">Sem registros.</td></tr>'}
+function renderBackup(){let t=localStorage.getItem(META);$('lastBackup').textContent=t?new Date(t).toLocaleString('pt-BR'):'Nenhum';$('localCount').textContent=data.activities.length+data.materials.length+data.photos.length+data.history.length}
+$('exportBtn').onclick=function(){let payload={version:'2.1',exportedAt:new Date().toISOString(),data:data};let blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup_reformas_'+new Date().toISOString().slice(0,10)+'.json';a.click();localStorage.setItem(META,payload.exportedAt);renderBackup();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+$('importBtn').onclick=()=>$('backupFile').click();
+$('backupFile').onchange=async function(){let f=this.files[0];if(!f)return;try{let x=JSON.parse(await f.text()),d=x.data||x;if(!d.activities||!d.materials)throw new Error();if(confirm('Importar este backup e substituir os dados atuais?')){data={activities:d.activities||[],materials:d.materials||[],photos:d.photos||[],history:d.history||[]};log('Backup restaurado',f.name);save();renderAll();alert('Backup restaurado com sucesso.')}}catch(e){alert('Backup inválido.')}this.value=''};
+$('clearBtn').onclick=function(){if(confirm('ATENÇÃO: apagar atividades, materiais, fotos e histórico?')){data={activities:[],materials:[],photos:[],history:[]};save();renderAll()}};
+
+load();renderAll();
+})();
+</script>
+</body>
+</html>
